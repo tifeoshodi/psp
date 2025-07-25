@@ -1,0 +1,1045 @@
+Project Schedule Summary
+==================================================
+
+Project Title: JIGAWA EXECUTION PLAN SCHEDULE
+Calendar Format: 6-day week
+Total Activities: 141
+Total Budget: $5,964,600,000.00
+
+Pre-Kickoff Activities (14 activities):
+----------------------------------------
+
+Sequence 1 (Schedule: 2 days):
+  • Payment of acceptance and Documentation fee
+    Duration: 3 days [MAX DURATION]
+    Action: Raise payment with finance,
+    Resources: PM, MGT
+    Budget: $97,100,000.00
+    Precursor: Award Letter, Mgt. Approval of acceptance fee and documentation fees
+
+
+Sequence 2 (Schedule: 7 days):
+  • Review and execute contract agreement
+    Duration: 3 days
+    Action: MGT and company Secretary Flight Ticket, and allowance
+    Resources: PM, MGT
+    Budget: $3,000,000.00
+    Precursor: Award Letter, Payment of acceptance and Documentation fee
+
+  • Source for project office, accomodation and ware house
+    Duration: 10 days [MAX DURATION]
+    Action: PM should get price from agent
+    Resources: Agent, PM
+    Budget: $0.00
+    Precursor: Contract Execution
+
+
+Sequence 3 (Schedule: 11 days):
+  • Project Execution plan
+    Duration: 5 days
+    Action: Preparation of Project execution plan, Reporting and monitoring structure
+    Resources: P & RE Unit, MGT
+    Budget: $0.00
+    Precursor: Contract Document, Go-by
+
+  • Engage sub-contractors and prepare sub contractor aggreements
+    Duration: 10 days [MAX DURATION]
+    Action: PM,  legal to develop contract agreement
+    Resources: PM, Legal, HR, Management
+    Budget: $0.00
+    Precursor: Contract, scope of work for sub-contractors
+
+  • Submission of Budget
+    Duration: 10 days [MAX DURATION]
+    Action: Develop and review budget with execution team
+    Resources: P & RE Unit, MGT
+    Budget: $0.00
+    Precursor: Project Execution Plan
+
+  • Prepare PO's for long lead items
+    Duration: 5 days
+    Action: Material take off, validate pricing and term of contract with vendors (All in-one, BESS)
+    Resources: PM, Finance, MGT
+    Budget: $0.00
+    Precursor: Contract Execution, Price Validation
+
+  • Schedule high level visit to Dubai and China
+    Duration: 7 days
+    Action: Management to visit OEM in Dubai and visit Onyx and ATESS factory in China
+    Resources: Flight Tickets
+    Budget: $34,990,000.00
+    Precursor: DDQ, Invitation letters from parties to be visited
+
+  • Get  and submit Project Performance Bond
+    Duration: 7 days
+    Action: Finance to approach bank with executed contract
+    Resources: PM, Finance
+    Budget: $20,000,000.00
+    Precursor: Signed Contract Agreement
+
+  • Get and submit of APG bond  for 30% mobilization
+    Duration: 3 days
+    Action: Finance to approach bank with executed contract
+    Resources: PM, Finance
+    Budget: $11,600,000.00
+    Precursor: Signed Contract Agreement
+
+
+Sequence 4 (Schedule: 12 days):
+  • Internal project Kickoff meeting
+    Duration: 1 days [MAX DURATION]
+    Action: Review execution plan, schedule, budget, Resource, risk Management and operational rediness
+    Resources: PMT, Sub-contractor, MGT
+    Budget: $300,000.00
+    Precursor: Subcontractors, Approved PEP, Schedule, and Budget. Submission of PB and APG
+
+
+Sequence 5 (Schedule: 23 days):
+  • Client project Kickoff meeting
+    Duration: 1 days [MAX DURATION]
+    Action: project meeting with Client, request a date for site handover
+    Resources: PMT, Client, MGT
+    Budget: $2,000,000.00
+    Precursor: Internal Kickoff
+
+
+Sequence 6 (Schedule: 26 days):
+  • Mobilization - Submission of of 30% invoice for Lot-1 and Lot-2
+    Duration: 5 days [MAX DURATION]
+    Action: Finance department to prepare 30% invoicess for Lot-1 And Lot 2 Projects, PMT to validate invoice with ministry before submission
+    Resources: PM, Finance
+    Budget: $0.00
+    Precursor: Signed Agreement, Submission of pereformance bond and APG, Project kick off
+
+
+Sequence 7 (Schedule: 29 days):
+  • Payment of 30% Mobilization
+    Duration: 26 days [MAX DURATION]
+    Action: Finance confirms payment from Client
+    Resources: Client, Finance
+    Budget: $0.00
+    Precursor: Submission of invoice
+
+Post Kick-off Activities (127 activities):
+----------------------------------------
+
+Sequence 0 (Schedule: 0 days):
+  • Obtain Permit
+    Duration: 0 days [MAX DURATION]
+    Action: Engage the client to check if IESL need to obtain permit in Jigawa State or any L.G.A
+    Resources: NA
+    Budget: $0.00
+    Precursor: NA
+
+
+Sequence 1 (Schedule: 2 days):
+  • Release purchase orders for long lead items (All in one and BESS)
+    Duration: 2 days [MAX DURATION]
+    Action: Have both parties execute PO for All-in-One & BESS (65 days delivery)
+    Resources: PM, Finance
+    Budget: $0.00
+    Precursor: Pre approved PO
+
+
+Sequence 2 (Schedule: 7 days):
+  • LC and Payment for All-in-One Streetlight and BESS
+    Duration: 4 days [MAX DURATION]
+    Action: 
+    Resources: PM, Finance
+    Budget: $3,964,120,000.00
+    Precursor: PO, Payment to OEM, Inspector
+
+
+Sequence 3 (Schedule: 11 days):
+  • Pay for office, accomodation and ware house
+    Duration: 2 days
+    Action: Hire office support team, security and drivers and others
+    Resources: Furniture,  consumables, PPE, Printer etc
+    Budget: $19,000,000.00
+    Precursor: Approved Budget, Mobilization
+
+  • Procurement of 2No Project Vehicle
+    Duration: 2 days
+    Action: Procure a new Toyota hilux with Automatic drive of 2021
+    Resources: PM,  Admin, MGT
+    Budget: $150,000,000.00
+    Precursor: Approved Budget, Mobilization
+
+  • Site Hand-over & Community Notification
+    Duration: 3 days
+    Action: The client and IESL team will travel to all L.G.A to hand over all All-in-One sites and Mini-Grid sites. We will discuss technical specification of poles head and paining of poles. The client representative will inform the chief of the L.G.A of the up coming work.
+    Resources: Execution team, Client
+    Budget: $0.00
+    Precursor: Sub contractor, Confirmation of dates from client
+
+  • Mobilize sub-contractors
+    Duration: 4 days [MAX DURATION]
+    Action: Pay sub contractor mobilization fees
+    Resources: PE, PM, Finance
+    Budget: $10,000,000.00
+    Precursor: Site Handing over
+
+
+Sequence 4 (Schedule: 12 days):
+  • Kick-off Meeting and on-boarding of sub-contractors
+    Duration: 1 days [MAX DURATION]
+    Action: PMT to review scope, quality control, timeline and HSE with sub contractors
+    Resources: Execution team, HSE Mgr, QAQC Mgr
+    Budget: $1,000,000.00
+    Precursor: Aproved Budget
+
+
+Sequence 5 (Schedule: 23 days):
+  • Detailed Survey and Risk identification for Solar All-in-One Streetlight All the sites
+    Duration: 9 days [MAX DURATION]
+    Action: Re-visit each site location in each L.G.A, to have a detailed asessment of the existing streetligh poles and foundation intergrity, and develop a plan on how to correct anomalis and modifypole heads
+    Resources: Execution team, sub contractors
+    Budget: $0.00
+    Precursor: project vehicles, cameras
+
+  • Detailed Survey for Solar Micro-Grid.
+    Duration: 9 days [MAX DURATION]
+    Action: Survey  of the Mini-Grid physical locations and production of survey Plans
+    Resources: Execution team, sub contractors
+    Budget: $1,600,000.00
+    Precursor: Surveyor, site handover
+
+  • Traffic Management, and material handling Plan
+    Duration: 9 days [MAX DURATION]
+    Action: Develop and implement a traffic management and material plan to minimize disruptions and ensure worker and public safety.
+    Resources: Execution team, sub contractors
+    Budget: $0.00
+    Precursor: Site Handing over
+
+  • Materials Take off
+    Duration: 9 days [MAX DURATION]
+    Action: Prepare list of all materials needed for light pole modification and installation including painting and alignment
+    Resources: Execution team, sub contractors
+    Budget: $0.00
+    Precursor: Site handover
+
+
+Sequence 6 (Schedule: 26 days):
+  • Comprehensive Site Survey Report
+    Duration: 3 days [MAX DURATION]
+    Action: Data from all site visits and survey
+    Resources: PMT
+    Budget: $0.00
+    Precursor: Detail survey
+
+
+Sequence 7 (Schedule: 29 days):
+  • Risk Management Workshop
+    Duration: 2 days [MAX DURATION]
+    Action: Organise workshop
+    Resources: PMT, QAQC, HSE, Facilitator, MGT
+    Budget: $2,000,000.00
+    Precursor: Comprehensive Site Survey Report
+
+
+Sequence 8 (Schedule: 32 days):
+  • Materials market survey, planing and costing
+    Duration: 2 days
+    Action: Travel to Kano for market survey, availability of materials
+    Resources: PMT
+    Budget: $0.00
+    Precursor: Material takeoff
+
+  • Procurement of Toolbox & Ladders
+    Duration: 3 days [MAX DURATION]
+    Action: Safety barriers, Warning tape, Work in progress" signs, high-visibility vest, hand gloves, safety goggles, helmet, safety boots, Insulated tools,  Multimeter, Mechanical and Electrical toolbox
+    Resources: PMT, Finance
+    Budget: $2,100,000.00
+    Precursor: Approved Budget, Fund release
+
+
+Sequence 9 (Schedule: 38 days):
+  • Procurement of perimeter wire fence materials for 4 L.G.A
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Finance
+    Budget: $15,200,000.00
+    Precursor: Budget approval, Market Survey, warehouse, release of fund
+
+  • Procurement and Transportation Solar Panel for 9 L.G.A
+    Duration: 4 days
+    Action: 
+    Resources: PMT, Finance
+    Budget: $101,490,000.00
+    Precursor: Ditto
+
+  • Procurement of PV Structure Materials for 4 L.G.A
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Finance
+    Budget: $27,300,000.00
+    Precursor: Ditto
+
+  • Procurement of AC & DC Cables and accessories for Mini-Grid for 4 L.G.A
+    Duration: 4 days
+    Action: 
+    Resources: PMT, Finance
+    Budget: $0.00
+    Precursor: Ditto
+
+  • Procurement of 4 X 35mm2 XLPE Cable for 4 .L.G.A
+    Duration: 4 days
+    Action: 
+    Resources: PMT, Finance
+    Budget: $9,880,000.00
+    Precursor: Ditto
+
+  • Procurement  of new galvanized pole materials for four L.G.A (Kiyawa, Taura, Auyo & Kafin Hausa)  and store in the Dutse Ware House
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Finance
+    Budget: $6,720,000.00
+    Precursor: Ditto
+
+  • Procurement of paint and materials for the modification of existing poles
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Finance
+    Budget: $40,430,000.00
+    Precursor: Ditto
+
+  • Procurement of Internet router and Six Month Data
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Finance
+    Budget: $1,880,000.00
+    Precursor: Ditto
+
+  • procurement of materials for construction of container power house for Mini-Grid, including 1.5HP Inverter A.C
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Finance
+    Budget: $18,280,000.00
+    Precursor: Ditto
+
+
+Sequence 10 (Schedule: 46 days):
+  • Schedule visit to China for FAT
+    Duration: 7 days [MAX DURATION]
+    Action: Engr. Kadiri and Engr Joshua will visit China for FAT
+    Resources: Funds for Tickets
+    Budget: $12,000,000.00
+    Precursor: 95% completion of production, VISA
+
+  • Fabrication of Streetlight poles & Sign Board, for IESL office, and 4 L.G.A
+    Duration: 6 days
+    Action: Release work order to sub contractors
+    Resources: Sub contractor
+    Budget: $0.00
+    Precursor: Sample fabrication
+
+  • Construction of Pre-cast concrete Base for All in One
+    Duration: 6 days
+    Action: Release work order to sub contractors
+    Resources: Sub contractor
+    Budget: $0.00
+    Precursor: Sample Pre cast
+
+
+Sequence 11 (Schedule: 54 days):
+  • Site clearing and leveling, first four L.G.A
+    Duration: 3 days
+    Action: 
+    Resources: PMT, Sub- contractor
+    Budget: $4,000,000.00
+    Precursor: Survey report, Budget Approval, Site handover
+
+  • Wire fencing  poles casting and installation of wire net, gate and rezor wire
+    Duration: 5 days
+    Action: 
+    Resources: PMT, Sub- contractor
+    Budget: $5,600,000.00
+    Precursor: Approval of budget, Procurement of material, Site Survey , Site Clearing
+
+  • Fibracation and installation of PV structure and Lighting arrestor at site
+    Duration: 7 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Sub- contractor
+    Budget: $14,700,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • BESS container base, setting out, casting  and curing
+    Duration: 5 days
+    Action: 
+    Resources: PMT, Sub- contractor
+    Budget: $400,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • Retrofiting of LGA Secretariat wiring system
+    Duration: 5 days
+    Action: 
+    Resources: PMT, Sub- contractor
+    Budget: $4,000,000.00
+    Precursor: Completion of all mini-grid installation
+
+
+Sequence 12 (Schedule: 58 days):
+  • Installation of PV panels
+    Duration: 3 days [MAX DURATION]
+    Action: 
+    Resources: PMT, Sub- contractor
+    Budget: $6,160,000.00
+    Precursor: PV structure fabrication
+
+
+Sequence 13 (Schedule: 93 days):
+  • Shipping and Bill of lading of All-in-One Streetlight to Apapa Port
+    Duration: 30 days [MAX DURATION]
+    Action: 
+    Resources: OEM, PMT, Finance
+    Budget: $149,100,000.00
+    Precursor: Completion of All in one, FAT
+
+  • Shipping and Bill of lading of BESS to Apapa Port
+    Duration: 30 days [MAX DURATION]
+    Action: 
+    Resources: OEM, PMT, Finance
+    Budget: $25,280,000.00
+    Precursor: Completion of BESS, FAT
+
+  • Procurement of Mercedes- Benz Bucket lifters
+    Duration: 7 days
+    Action: 
+    Resources: OEM, PMT, Finance
+    Budget: $100,070,000.00
+    Precursor: shipment of materials
+
+
+Sequence 14 (Schedule: 107 days):
+  • Clearing/ custom duity of All-in-One and transportation from Lagos Port to Dutse Ware house
+    Duration: 10 days
+    Action: 
+    Resources: OEM, PMT, Finance
+    Budget: $135,000,000.00
+    Precursor: Bill of lading
+
+  • Clearing/ custom duity of BESS and transportation from Lagos Port to Dutse Ware house
+    Duration: 12 days [MAX DURATION]
+    Action: 
+    Resources: OEM, PMT, Finance
+    Budget: $34,000,000.00
+    Precursor: Bill of lading
+
+
+Sequence 15 (Schedule: 113 days):
+  • Submit invoice no 2 (N5.2B spent, 4 months)
+    Duration: 5 days [MAX DURATION]
+    Action: prepare invoice with supporting documents. Invite client for material inspection
+    Resources: PM, Finance
+    Budget: $0.00
+    Precursor: Pre approval of invoice by client
+
+  • Installation of BESS
+    Duration: 3 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,000,000.00
+
+
+Sequence 16 (Schedule: 136 days):
+  • Approval and payment of 50% 2nd Milestone
+    Duration: 14 days
+    Action: Follow up by account receivable
+    Resources: PM, Client, Finance
+    Budget: $0.00
+
+  • Daily materials requisition form by sub-contractor
+    Duration: 20 days [MAX DURATION]
+    Action: Material release form will be sign by Sub-contractor, project Engineer and Project Manager and will be release by Store officer. The underlisted materials per pole are,  Pre-tested All-in-One Solar Streetlight Unit in a pack inclung bolt & nut. Galvanizing repair paint, Sky bucket lifter,  light Crane,  Ladder, 2.5KVA generator
+    Resources: PMT, Sub contractor
+    Budget: $0.00
+    Precursor: Material in storage
+
+  • De-energize site
+    Duration: 20 days [MAX DURATION]
+    Action: Take outtage from disco/ L.G.A staff for safe work
+    Resources: Ditto
+    Budget: $36,240,000.00
+    Precursor: Daily material supply
+
+  • Decommissioning Existing Streetlights
+    Duration: 20 days [MAX DURATION]
+    Action: There will be a sub-team for only decoping of the existing streetlight fitting head, disconnected the breaker, remove the bulb head, cable breakers and isolate the power, remove the existing pole for modification
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: De-energize
+
+  • Installation,Alignment and Function test of All-in-One
+    Duration: 20 days [MAX DURATION]
+    Action: Coupling /Installation of All-in-One to new/ modified poles
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: Pre-modification of poles, Pre- Test of all in one
+
+  • Re-Energize remaining poles
+    Duration: 20 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: Successful Installation, looping of connection
+
+  • Excavate, recover armord cables and back filled the earh
+    Duration: 20 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $8,700,000.00
+
+  • Transportation of recovered materials to Safe location
+    Duration: 20 days [MAX DURATION]
+    Action: Pole filting and other materials recovered will be transported to a selected safe location waiting for collection to client store.
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: Daily Material inventory sign off
+
+  • Modification of existing poles and painting
+    Duration: 20 days [MAX DURATION]
+    Action: There will be a mobile welding team and a mobile workshop  with generator for on the spot modification to save moving up and down. The welding integrety will be check by Project Manager of Project Engineer or person apported by the PM
+    Resources: Ditto
+    Budget: $11,300,000.00
+    Precursor: Delivery of recovered poles
+
+  • Recovery of Generator
+    Duration: 1 days
+    Action: Decomissioning of 100KVA generator, recovery of amord cables and other accessaries
+    Resources: Ditto
+    Budget: $5,560,000.00
+    Precursor: Decommissioning of existing streetlight, De-energizing
+
+  • Recovery of Transformers
+    Duration: 1 days
+    Action: Decomissioning of 500KVA Transformers, recovery of amord cables, lighten arrestor, D-Fuse and other accessaries
+    Resources: Ditto
+    Budget: $9,110,000.00
+    Precursor: Decommissioning of existing streetlight, De-energizing
+
+  • Transportation to Client central stores
+    Duration: 1 days
+    Action: Collection of all recovered materials and transportation to client central store
+    Resources: Ditto
+    Budget: $5,260,000.00
+    Precursor: Daily Recovery of materials
+
+  • Fabrication of container for Power house/BESS
+    Duration: 5 days
+    Action: 
+    Resources: Ditto
+    Budget: $800,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • Installation of BESS
+    Duration: 3 days
+    Action: 
+    Resources: Ditto
+    Budget: $4,000,000.00
+
+  • Configuration of Mini-Grid and online monitoring
+    Duration: 2 days
+    Action: 
+    Resources: Ditto
+    Budget: $6,920,000.00
+    Precursor: PV structure fabrication, Fabrication of container Power house
+
+  • Connection of L.G.A Secretariate to Mini-Grid & Installation of 4 X 35mm2 XLPE Cable
+    Duration: 2 days
+    Action: 
+    Resources: Ditto
+    Budget: $6,000,000.00
+    Precursor: Retrofiting of LGA secretariat
+
+  • Testing of Mini-Grid system
+    Duration: 1 days
+    Action: 
+    Resources: Ditto
+    Budget: $1,440,000.00
+    Precursor: All connections of mini-grid components
+
+  • Trainig of Opertors
+    Duration: 1 days
+    Action: 
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: Testing
+
+  • Technical Commissioning
+    Duration: 1 days
+    Action: 
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: Training of operators
+
+
+Sequence 17 (Schedule: 142 days):
+  • Procurement of perimeter wire fence materials
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $19,000,000.00
+    Precursor: Budget approval, Market Survey, Renting of warehouse
+
+  • Procurement of PV Structure Materials
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $34,130,000.00
+    Precursor: Budget approval, Market Survey, Renting of warehouse
+
+  • Procurement of AC & DC Cables and accessories for Mini-Grid
+    Duration: 4 days
+    Action: 
+    Resources: Ditto
+    Budget: $0.00
+    Precursor: Budget approval, Market Survey, Renting of warehouse
+
+  • Procurement of 4 X 35mm2 XLPE Cable
+    Duration: 4 days
+    Action: 
+    Resources: Ditto
+    Budget: $12,350,000.00
+
+  • Procurement  of new galvanized pole materials  and store in the Dutse Ware House
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $26,890,000.00
+    Precursor: Budget approval, Market Survey, Renting of warehouse
+
+  • Procurement of paint and materials for the modification of existing poles
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $124,940,000.00
+    Precursor: Budget approval, Market Survey, Renting of warehouse
+
+  • Procurement of Internet router and Six Month Data
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $2,350,000.00
+    Precursor: Budget approval, Market Survey, Renting of warehouse
+
+  • procurement of materials for construction of container power house for Mini-Grid, including 1.5HP Inverter A.C for five L.G.A
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $22,850,000.00
+
+
+Sequence 18 (Schedule: 151 days):
+  • Fabrigation ofStreetlight poles & Sign Board, for IESL office, and 4 L.G.A
+    Duration: 8 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $4,880,000.00
+
+  • Construction of Pre-cast concrete Base for All in One
+    Duration: 8 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $7,690,000.00
+
+  • Site clearing and leveling, first four L.G.A
+    Duration: 3 days
+    Action: 
+    Resources: Ditto
+    Budget: $4,000,000.00
+    Precursor: Survey report, Budget Approval, Site handover
+
+
+Sequence 19 (Schedule: 155 days):
+  • Wire fencing  poles casting and installation of wire net, gate and rezor wire
+    Duration: 3 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $5,600,000.00
+    Precursor: Approval of budget, Procurement of material, Site Survey , Site Clearing
+
+
+Sequence 20 (Schedule: 163 days):
+  • Fibracation and installation of PV structure and Lighting arrestor at site
+    Duration: 7 days [MAX DURATION]
+    Action: 
+    Resources: Ditto
+    Budget: $14,700,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • BESS container base, setting out casting  and curing
+    Duration: 5 days
+    Action: 
+    Resources: Ditto
+    Budget: $400,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+
+Sequence 21 (Schedule: 215 days):
+  • Installation of PV panels
+    Duration: 3 days
+    Action: 
+    Resources: Ditto
+    Budget: $6,160,000.00
+    Precursor: PV structure fabrication
+
+  • Retrofiting of LGA Secretariat wiring system
+    Duration: 5 days
+    Action: 
+    Resources: Ditto
+    Budget: $4,000,000.00
+    Precursor: Completion of all mini-grid installation
+
+  • Daily materials requisition form by sub-contractor
+    Duration: 45 days [MAX DURATION]
+    Action: Material release form will be sign by Sub-contractor, project Engineer and Project Manager and will be release by Store officer. The underlisted materials per pole are,  Pre-tested All-in-One Solar Streetlight Unit in a pack inclung bolt & nut. Galvanizing repair paint, Sky bucket lifter,  light Crane,  Ladder, 2.5KVA generator
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Material in storage
+
+  • De-energize site
+    Duration: 45 days [MAX DURATION]
+    Action: Take outtage from disco/ L.G.A staff for safe work
+    Resources: Execution, Team
+    Budget: $93,430,000.00
+    Precursor: Daily material supply
+
+  • Decommissioning Existing Streetlights
+    Duration: 45 days [MAX DURATION]
+    Action: There will be a sub-team for only decoping of the existing streetlight fitting head, disconnected the breaker, remove the bulb head, cable breakers and isolate the power, remove the existing pole for modification
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: De-energize
+
+  • Installation, Alignment and Function test of All-in-One
+    Duration: 45 days [MAX DURATION]
+    Action: Coupling /Installation of All-in-One to new/ modified poles
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Pre-modification of poles, Pre- Test of all in one
+
+  • Re-Energize remaining poles
+    Duration: 45 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Successful Installation, looping of connection
+
+  • Excavate, recover armord cables and back filled the earh
+    Duration: 20 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $27,520,000.00
+
+  • Transportation of recovered materials to Safe location
+    Duration: 45 days [MAX DURATION]
+    Action: Pole filting and other materials recovered will be transported to a selected safe location waiting for collection to client store.
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Daily Material inventory sign off
+
+  • Modification of existing poles and painting
+    Duration: 45 days [MAX DURATION]
+    Action: There will be a mobile welding team and a mobile workshop  with generator for on the spot modification to save moving up and down. The welding integrety will be check by Project Manager of Project Engineer or person apported by the PM
+    Resources: Execution, Team
+    Budget: $28,970,000.00
+    Precursor: Delivery of recovered poles
+
+  • Recovery of Generator
+    Duration: 7 days
+    Action: Decomissioning of 100KVA generator, recovery of amord cables and other accessaries
+    Resources: Execution, Team
+    Budget: $11,110,000.00
+    Precursor: Decommissioning of existing streetlight, De-energizing
+
+  • Recovery of Transformers
+    Duration: 7 days
+    Action: Decomissioning of 500KVA Transformers, recovery of amord cables, lighten arrestor, D-Fuse and other accessaries
+    Resources: Execution, Team
+    Budget: $18,230,000.00
+    Precursor: Decommissioning of existing streetlight, De-energizing
+
+  • Transportation to Client central stores
+    Duration: 2 days
+    Action: Collection of all recovered materials and transportation to client central store
+    Resources: Execution, Team
+    Budget: $9,310,000.00
+    Precursor: Daily Recovery of materials
+
+  • Fabrication container for Power house/BESS
+    Duration: 5 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $800,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • Installation of BESS
+    Duration: 3 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $4,000,000.00
+
+  • Configuration of Mini-Grid and online monitoring
+    Duration: 2 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $6,920,000.00
+    Precursor: PV structure fabrication, Fabrication of container Power house
+
+  • Connection of L.G.A Secretariate to Mini-Grid & Installation of 4 X 35mm2 XLPE Cable
+    Duration: 2 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $6,000,000.00
+    Precursor: Retrofiting of LGA secretariat
+
+  • Testing of Mini-Grid system
+    Duration: 1 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,440,000.00
+    Precursor: All connections of mini-grid components
+
+  • Trainig of Opertors
+    Duration: 1 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Testing
+
+  • Technical Commissioning
+    Duration: 1 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Training of operators
+
+  • Progress invoice no 2
+    Duration: 0 days
+    Action: 
+    Resources: PM, Finance
+    Budget: $0.00
+
+  • Project Manager to email finance for 3rd Milestone Payments for Lot-1 and Lot-2
+    Duration: 1 days
+    Action: IESL Finance department to prepare 3rd Milestone invoicess for Lot-1 And Lot 2 Projects
+    Resources: PM, Finance
+    Budget: $0.00
+
+  • Preparation  and submission of 3rd Milestone payment of LOT 1 and LOT 2 by finance
+    Duration: 2 days
+    Action: 
+    Resources: PM, Finance
+    Budget: $0.00
+
+  • Approval and payment of 10% 2nd Milestone
+    Duration: 14 days
+    Action: 
+    Resources: Client, PM, Finance
+    Budget: $0.00
+
+
+Sequence 22 (Schedule: 225 days):
+  • Fabrication of Sign Board
+    Duration: 3 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $350,000.00
+
+  • Construction of Pre-cast concrete Base for All in One
+    Duration: 8 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $4,300,000.00
+
+  • Site clearing and leveling
+    Duration: 3 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,000,000.00
+    Precursor: Survey report, Budget Approval, Site handover
+
+
+Sequence 23 (Schedule: 228 days):
+  • Wire fencing  poles casting and installation of wire net, gate and rezor wire
+    Duration: 3 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,400,000.00
+    Precursor: Approval of budget, Procurement of material, Site Survey , Site Clearing
+
+
+Sequence 24 (Schedule: 236 days):
+  • Fibracation and installation of PV structure and Lighting arrestor at site
+    Duration: 7 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $3,680,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • BESS container base casting  and curing
+    Duration: 5 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $100,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+
+Sequence 25 (Schedule: 242 days):
+  • Installation of PV panels
+    Duration: 3 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,540,000.00
+    Precursor: PV structure fabrication
+
+  • Retrofiting of LGA Secretariat wiring system
+    Duration: 5 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,000,000.00
+    Precursor: Completion of all mini-grid installation
+
+
+Sequence 26 (Schedule: 266 days):
+  • Daily materials requisition form by sub-contractor
+    Duration: 20 days [MAX DURATION]
+    Action: Material release form will be sign by Sub-contractor, project Engineer and Project Manager and will be release by Store officer. The underlisted materials per pole are,  Pre-tested All-in-One Solar Streetlight Unit in a pack inclung bolt & nut. Galvanizing repair paint, Sky bucket lifter,  light Crane,  Ladder, 2.5KVA generator
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Material in storage
+
+  • De-energize site
+    Duration: 20 days [MAX DURATION]
+    Action: Take outtage from disco/ L.G.A staff for safe work
+    Resources: Execution, Team
+    Budget: $19,050,000.00
+    Precursor: Daily material supply
+
+  • Decommissioning Existing Streetlights
+    Duration: 20 days [MAX DURATION]
+    Action: There will be a sub-team for only decoping of the existing streetlight fitting head, disconnected the breaker, remove the bulb head, cable breakers and isolate the power, remove the existing pole for modification
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: De-energize
+
+  • Installation,Alignment and Function test of All-in-One
+    Duration: 20 days [MAX DURATION]
+    Action: Coupling /Installation of All-in-One to new/ modified poles
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Pre-modification of poles, Pre- Test of all in one
+
+  • Re-Energize remaining poles
+    Duration: 20 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Successful Installation, looping of connection
+
+  • Excavate, recover armord cables and back filled the earh
+    Duration: 20 days [MAX DURATION]
+    Action: 
+    Resources: Execution, Team
+    Budget: $5,010,000.00
+
+  • Transportation of recovered materials to Safe location
+    Duration: 20 days [MAX DURATION]
+    Action: Pole filting and other materials recovered will be transported to a selected safe location waiting for collection to client store.
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Daily Material inventory sign off
+
+  • Modification of existing poles and painting
+    Duration: 20 days [MAX DURATION]
+    Action: There will be a mobile welding team and a mobile workshop  with generator for on the spot modification to save moving up and down. The welding integrety will be check by Project Manager of Project Engineer or person apported by the PM
+    Resources: Execution, Team
+    Budget: $6,030,000.00
+    Precursor: Delivery of recovered poles
+
+  • Recovery of Generator
+    Duration: 7 days
+    Action: Decomissioning of 100KVA generator, recovery of amord cables and other accessaries
+    Resources: Execution, Team
+    Budget: $2,380,000.00
+    Precursor: Decommissioning of existing streetlight, De-energizing
+
+  • Recovery of Transformers
+    Duration: 7 days
+    Action: Decomissioning of 500KVA Transformers, recovery of amord cables, lighten arrestor, D-Fuse and other accessaries
+    Resources: Execution, Team
+    Budget: $3,910,000.00
+    Precursor: Decommissioning of existing streetlight, De-energizing
+
+  • Transportation to Client central stores
+    Duration: 2 days
+    Action: Collection of all recovered materials and transportation to client central store
+    Resources: Execution, Team
+    Budget: $1,760,000.00
+    Precursor: Daily Recovery of materials
+
+  • Fabrication container for Power house/BESS
+    Duration: 5 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $200,000.00
+    Precursor: Approval of budget, Procurement of material, installation of wire net
+
+  • Configuration of Mini-Grid and online monitoring
+    Duration: 2 days
+    Action: 
+    Resources: 
+    Budget: $1,730,000.00
+
+  • Connection of L.G.A Secretariate to Mini-Grid & Installation of 4 X 35mm2 XLPE Cable
+    Duration: 2 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $1,500,000.00
+    Precursor: Retrofiting of LGA secretariat
+
+  • Testing of Mini-Grid system
+    Duration: 1 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $360,000.00
+    Precursor: All connections of mini-grid components
+
+  • Trainig of Opertors
+    Duration: 1 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Testing
+
+  • Technical Commissioning
+    Duration: 1 days
+    Action: 
+    Resources: Execution, Team
+    Budget: $0.00
+    Precursor: Training of operators
+
+  • Submit invoice no 3 (N5.8B spent, 9 months spent, 7.2B due, additional N800m retention after 3 months)
+    Duration: 0 days
+    Action: 
+    Resources: PM, Finance
+    Budget: $0.00
+
+  • Project Manager to email finance for 3rd Milestone Payments for Lot-1 and Lot-2
+    Duration: 1 days
+    Action: IESL Finance department to prepare 3rd Milestone invoicess for Lot-1 And Lot 2 Projects
+    Resources: PM, Finance
+    Budget: $0.00
+
+  • Preparation  and submission of 3rd Milestone payment of LOT 1 and LOT 2 by finance
+    Duration: 2 days
+    Action: 
+    Resources: PM, Finance
+    Budget: $0.00
+
+  • Miscellaneous (5%)
+    Duration: 14 days
+    Action: 
+    Resources: Client, PM, Finance
+    Budget: $285,000,000.00
+
