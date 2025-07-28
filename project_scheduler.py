@@ -182,31 +182,33 @@ class ExcelGenerator:
         """Add project title to the worksheet"""
         cell = self.worksheet.cell(row=start_row, column=1, value=f"Project Title: {self.project.title}")
         cell.font = Font(size=14, bold=True)
-        self.worksheet.merge_cells(f"A{start_row}:H{start_row}")
+        self.worksheet.merge_cells(f"A{start_row}:I{start_row}")  # Extended to include all columns
         return start_row + 1
 
     def _add_headers(self, start_row: int) -> int:
-        """Add column headers"""
+        """Add column headers with S/N and formatted budget header"""
         headers = [
-            "Activities/Tasks", "Action Needed", "Duration", "Precursor",
-            "Sequence", "Schedule (in days)", "Resources", "Budget"
+            "S/N", "Activities/Tasks", "Action Needed", "Duration", "Precursor",
+            "Sequence", "Schedule (in days)", "Resources", "Budget (MILLION)"
         ]
-
+        
         for col, header in enumerate(headers, 1):
             cell = self.worksheet.cell(row=start_row, column=col, value=header)
             cell.fill = self.header_fill
             cell.font = self.header_font
             cell.alignment = Alignment(horizontal='center', vertical='center')
-
+            cell.border = self.border
+        
         return start_row + 1
 
     def _add_section(self, section: ActivitySection, start_row: int) -> int:
         """Add a section with its activities"""
-        # Add section header
+        # Add section header (now spans S/N column too)
         section_cell = self.worksheet.cell(row=start_row, column=1, value=section.value)
         section_cell.fill = self.section_fill
         section_cell.font = self.section_font
-        self.worksheet.merge_cells(f"A{start_row}:H{start_row}")
+        section_cell.border = self.border
+        self.worksheet.merge_cells(f"A{start_row}:I{start_row}")  # Extended to column I for Budget
         current_row = start_row + 1
 
         # Get activities and schedules for this section
@@ -218,42 +220,79 @@ class ExcelGenerator:
         # Sort activities by sequence
         activities.sort(key=lambda x: x.sequence)
 
-        # Add activities
+        # Add activities with S/N numbering
+        activity_number = 1
         for activity in activities:
-            self._add_activity_row(activity, current_row, schedules, max_duration_set)
+            self._add_activity_row(activity, current_row, schedules, max_duration_set, activity_number)
             current_row += 1
+            activity_number += 1
 
         # Merge cells for same sequences
         self._merge_schedule_cells(section, start_row + 1, current_row - 1)
 
         return current_row
 
-    def _add_activity_row(self, activity: Activity, row: int, schedules: Dict[int, int], max_duration_set: set):
-        """Add a single activity row"""
+    def _add_activity_row(self, activity: Activity, row: int, schedules: Dict[int, int], max_duration_set: set, activity_number: int):
+        """Add a single activity row with enhanced formatting"""
         # Calculate adjusted schedule - Pre-Kickoff activities always have 0
         if activity.section == ActivitySection.PRE_KICKOFF:
             adjusted_schedule = 0
+            schedule_formula = "0"  # Simple value for pre-kickoff
         else:
             raw_schedule = schedules.get(activity.sequence, 0)
             adjusted_schedule = ScheduleCalculator.apply_calendar_format(raw_schedule, self.project.calendar_format)
+            
+            # Create formula comment for schedule calculation
+            if self.project.calendar_format == CalendarFormat.FIVE_DAY:
+                schedule_formula = f"={raw_schedule}+({raw_schedule}//5)*2"  # Add weekends
+            elif self.project.calendar_format == CalendarFormat.SIX_DAY:
+                schedule_formula = f"={raw_schedule}+({raw_schedule}//6)*1"  # Add one day per week
+            else:
+                schedule_formula = f"={raw_schedule}"  # No adjustment for 7-day
+
+        # Format budget to millions with 2 decimal places
+        budget_millions = activity.budget / 1000000 if activity.budget > 0 else 0.0
 
         values = [
+            activity_number,  # S/N column
             activity.task,
             activity.action_needed,
             activity.duration,
             activity.precursor,
             activity.sequence,
-            adjusted_schedule,
+            adjusted_schedule,  # We'll add formula separately
             activity.resources,
-            activity.budget
+            budget_millions
         ]
 
         for col, value in enumerate(values, 1):
             cell = self.worksheet.cell(row=row, column=col, value=value)
+            cell.border = self.border  # Consistent borders
+            
+            # Apply specific formatting based on column
+            if col == 1:  # S/N column
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+                cell.font = Font(bold=True)
+            elif col in [4, 6, 7]:  # Duration, Sequence, Schedule columns
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+            elif col == 9:  # Budget column  
+                cell.alignment = Alignment(horizontal='center', vertical='center')
+                cell.number_format = '0.00'  # 2 decimal places
+            else:
+                cell.alignment = Alignment(horizontal='left', vertical='center')
 
             # Highlight max duration text in red
-            if col == 3 and id(activity) in max_duration_set:  # Duration column
+            if col == 4 and id(activity) in max_duration_set:  # Duration column (now col 4)
                 cell.font = Font(color="FF0000", bold=True)  # Red text, bold
+        
+        # Add formula to schedule cell (column 7) if it's not pre-kickoff
+        if activity.section != ActivitySection.PRE_KICKOFF:
+            schedule_cell = self.worksheet.cell(row=row, column=7)
+            # Add comment with formula explanation
+            from openpyxl.comments import Comment
+            comment_text = f"Formula: {schedule_formula}\nBase schedule: {schedules.get(activity.sequence, 0)} days\nCalendar format: {self.project.calendar_format.value}"
+            comment = Comment(comment_text, "Project Scheduler")
+            schedule_cell.comment = comment
 
     def _merge_schedule_cells(self, section: ActivitySection, start_row: int, end_row: int):
         """Merge cells in Schedule column for same sequence values"""
@@ -277,23 +316,26 @@ class ExcelGenerator:
                 if len(seq_rows) > 1:
                     first_row = min(seq_rows)
                     last_row = max(seq_rows)
-                    self.worksheet.merge_cells(f"F{first_row}:F{last_row}")
+                    self.worksheet.merge_cells(f"G{first_row}:G{last_row}")  # Schedule is now column G
 
     def _add_budget_total(self, start_row: int) -> int:
         """Add a total row for budget calculation"""
         current_row = start_row + 1  # Add empty row before total
         
-        # Add "Total" label
-        total_cell = self.worksheet.cell(row=current_row, column=7, value="Total:")
+        # Add "Total" label (now in Resources column)
+        total_cell = self.worksheet.cell(row=current_row, column=8, value="Total:")
         total_cell.font = Font(bold=True)
         total_cell.alignment = Alignment(horizontal='right', vertical='center')
+        total_cell.border = self.border
         
-        # Calculate total budget
-        total_budget = sum(activity.budget for activity in self.project.activities)
-        budget_cell = self.worksheet.cell(row=current_row, column=8, value=total_budget)
+        # Calculate total budget in millions
+        total_budget_millions = sum(activity.budget for activity in self.project.activities) / 1000000
+        budget_cell = self.worksheet.cell(row=current_row, column=9, value=total_budget_millions)
         budget_cell.font = Font(bold=True)
         budget_cell.fill = PatternFill(start_color="FFFF99", end_color="FFFF99", fill_type="solid")
         budget_cell.alignment = Alignment(horizontal='center', vertical='center')
+        budget_cell.number_format = '0.00'  # 2 decimal places
+        budget_cell.border = self.border
         
         return current_row + 1
 
@@ -454,8 +496,8 @@ class ProjectSchedulerGUI:
         self.list_frame.columnconfigure(0, weight=1)
         self.list_frame.rowconfigure(0, weight=1)
 
-        # Treeview for activities
-        columns = ("Section", "Task", "Action", "Duration", "Precursor", "Sequence", "Resources", "Budget")
+        # Treeview for activities (updated to show budget in millions)
+        columns = ("Section", "Task", "Action", "Duration", "Precursor", "Sequence", "Resources", "Budget (M)")
         self.activities_tree = ttk.Treeview(self.list_frame, columns=columns, show="headings", height=15)
 
         # Configure columns
@@ -537,9 +579,10 @@ class ProjectSchedulerGUI:
 
             self.activities_data.append(activity)
 
-            # Add to treeview
+            # Add to treeview (show budget in millions)
+            budget_millions = budget / 1000000 if budget > 0 else 0.0
             self.activities_tree.insert("", tk.END, values=(
-                section.value, task, action, duration, precursor, sequence, resources, budget
+                section.value, task, action, duration, precursor, sequence, resources, f"{budget_millions:.2f}"
             ))
 
             # Update activities list count
