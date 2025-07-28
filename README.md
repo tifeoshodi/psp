@@ -15,7 +15,7 @@ A Python application that creates Excel project schedules from user inputs throu
 
 ## System Rules
 
-The application follows these key business rules:
+The application follows these key rules:
 
 1. **Cell Merging**: Cells in the "Schedule (in days)" column are merged for rows sharing the same sequence value
 2. **Schedule Calculation**: 
@@ -93,48 +93,12 @@ The generated Excel file includes these columns:
 - **Resources**: Required resources
 - **Budget**: Associated costs (includes highlighted total row)
 
-## Example Usage
-
-### Sample Project Data
-
-Here's an example of how to structure your project:
-
-**Project Title**: "Website Development Project"
-
-**Pre-Kickoff Activities** (Sequence 1):
-- Task: "Requirements Gathering", Duration: 3 days
-- Task: "Budget Approval", Duration: 2 days
-- Task: "Team Assembly", Duration: 1 day
-
-**Post Kick-off Activities**:
-- **Sequence 1** (Development Phase):
-  - Task: "Frontend Development", Duration: 10 days
-  - Task: "Backend Development", Duration: 12 days
-  - Task: "Database Setup", Duration: 8 days
-
-- **Sequence 2** (Testing Phase):
-  - Task: "Unit Testing", Duration: 5 days
-  - Task: "Integration Testing", Duration: 7 days
-
-**Schedule Calculation Result**:
-- Pre-Kickoff: All activities show 0 days (scheduling starts post-kickoff)
-- Sequence 1: Shows 12 days (maximum of 10, 12, 8)
-- Sequence 2: Shows 19 days (12 + 7, where 7 is max of 5, 7)
-
 ### Calendar Format Examples
 
 - **5-day week**: 12 working days → 16 calendar days (includes weekends)
 - **6-day week**: 12 working days → 14 calendar days (includes Sundays)
 - **7-day week**: 12 working days → 12 calendar days (no adjustments)
 
-## File Structure
-
-```
-PSP/
-├── project_scheduler.py     # Main application file
-├── requirements.txt         # Python dependencies
-└── README.md               # This file
-```
 
 ## Requirements
 
@@ -161,21 +125,6 @@ The application validates:
 - Numeric values for Duration, Sequence, and Budget
 - Positive duration values
 
-## Advanced Features
-
-### Cell Merging Logic
-The application automatically merges cells in the "Schedule (in days)" column for activities that share the same sequence number, creating a clean, professional appearance.
-
-### Duration Highlighting
-Activities with the maximum duration within each sequence group are highlighted with bold red text for easy identification of critical path items.
-
-### Dual File Generation
-The application automatically creates two files when generating output:
-- **Excel file (.xlsx)**: Professional formatted spreadsheet with merged cells, calculations, and formatting
-- **Text file (.txt)**: Detailed project breakdown with schedule summary, activity details, and budget information
-
-### Multiple Subsections
-You can create multiple subsections within the "Post Kick-off Activities" by using different sequence numbers, all maintained within the same worksheet.
 
 ## Support
 
