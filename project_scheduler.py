@@ -961,11 +961,22 @@ class ExcelLoader:
                 self.workbook.close()
     
     def _extract_project_title(self) -> Optional[str]:
-        """Extract project title from the first merged cell"""
-        for row in range(1, 10):  # Check first 10 rows
+        """Extract project title from the Excel file (supports both old and new formats)"""
+        # First check for old format: "Project Title: ..." in column 1
+        for row in range(1, 10):
             cell = self.worksheet.cell(row=row, column=1)
             if cell.value and isinstance(cell.value, str) and "Project Title:" in cell.value:
                 return cell.value.replace("Project Title:", "").strip()
+        
+        # Then check for new format: title is stored in column 3 (C) in the generated Excel files
+        for row in range(1, 10):
+            title_cell = self.worksheet.cell(row=row, column=3)
+            if title_cell.value and isinstance(title_cell.value, str) and title_cell.value.strip():
+                # Skip if it's clearly a header row
+                if "Activities/Tasks" in title_cell.value or "S/No" in title_cell.value:
+                    continue
+                return title_cell.value.strip()
+        
         return None
     
     def _extract_calendar_format(self) -> CalendarFormat:
@@ -980,15 +991,23 @@ class ExcelLoader:
         current_section = None
         header_row = None
         
-        # Find the header row
+        # Find the header row - support both new format (S/No) and old format (Activities/Tasks)
+        header_row = None
+        old_format = False
+        
         for row in range(1, 20):
             cell = self.worksheet.cell(row=row, column=1)
-            if cell.value == "S/N":
+            if cell.value == "S/No":
                 header_row = row
+                old_format = False
+                break
+            elif cell.value == "Activities/Tasks":
+                header_row = row
+                old_format = True
                 break
         
         if not header_row:
-            raise ValueError("Could not find header row with S/N column")
+            raise ValueError("Could not find header row with S/No or Activities/Tasks column")
         
         # Process rows after header
         for row in range(header_row + 1, self.worksheet.max_row + 1):
@@ -1012,17 +1031,37 @@ class ExcelLoader:
             
             # Extract activity data
             try:
-                s_n = row_data[0] if row_data[0] else ""
-                task = row_data[1] if row_data[1] else ""
-                action_needed = row_data[2] if row_data[2] else ""
-                duration = int(row_data[3]) if row_data[3] and str(row_data[3]).replace('.', '').isdigit() else 0
-                precursor = row_data[4] if row_data[4] else ""
-                sequence = int(row_data[5]) if row_data[5] and str(row_data[5]).replace('.', '').isdigit() else 0
-                resources = row_data[7] if row_data[7] else ""
-                
-                # Convert budget from millions back to base currency
-                budget_millions = float(row_data[8]) if row_data[8] and str(row_data[8]).replace('.', '').replace('-', '').isdigit() else 0.0
-                budget = budget_millions * 1000000
+                if old_format:
+                    # Old format: Activities/Tasks | Action Needed | Duration | Precursor | Sequence | Schedule | Resources | Budget
+                    task = row_data[0] if row_data[0] else ""
+                    action_needed = row_data[1] if row_data[1] else ""
+                    duration = int(row_data[2]) if row_data[2] and str(row_data[2]).replace('.', '').isdigit() else 0
+                    precursor = row_data[3] if row_data[3] else ""
+                    sequence = int(row_data[4]) if row_data[4] and str(row_data[4]).replace('.', '').isdigit() else 0
+                    resources = row_data[6] if len(row_data) > 6 and row_data[6] else ""
+                    
+                    # Convert budget from base currency to millions (old format stores in base currency)
+                    try:
+                        budget_raw = float(row_data[7]) if len(row_data) > 7 and row_data[7] is not None else 0.0
+                        budget = budget_raw  # Already in base currency
+                    except (ValueError, TypeError):
+                        budget = 0.0
+                else:
+                    # New format: S/No | Activities/Tasks | Action Needed | Duration | Precursor | Sequence | Schedule | Resources | Budget (MILLION)
+                    s_n = row_data[0] if row_data[0] else ""
+                    task = row_data[1] if row_data[1] else ""
+                    action_needed = row_data[2] if row_data[2] else ""
+                    duration = int(row_data[3]) if row_data[3] and str(row_data[3]).replace('.', '').isdigit() else 0
+                    precursor = row_data[4] if row_data[4] else ""
+                    sequence = int(row_data[5]) if row_data[5] and str(row_data[5]).replace('.', '').isdigit() else 0
+                    resources = row_data[7] if len(row_data) > 7 and row_data[7] else ""
+                    
+                    # Convert budget from millions back to base currency
+                    try:
+                        budget_millions = float(row_data[8]) if len(row_data) > 8 and row_data[8] is not None else 0.0
+                        budget = budget_millions * 1000000
+                    except (ValueError, TypeError):
+                        budget = 0.0
                 
                 if task and current_section:  # Only add if we have a task and section
                     activity = Activity(
