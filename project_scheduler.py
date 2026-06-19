@@ -19,7 +19,21 @@ from typing import List, Dict, Optional
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.comments import Comment
+from openpyxl.utils import get_column_letter
 import os
+import sys
+import datetime
+from typing import Union
+
+
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 class CalendarFormat(Enum):
@@ -57,6 +71,7 @@ class Project:
     title: str
     activities: List[Activity] = field(default_factory=list)
     calendar_format: CalendarFormat = CalendarFormat.FIVE_DAY
+    start_date: Optional[datetime.date] = None
 
     def add_activity(self, activity: Activity):
         """Add an activity to the project"""
@@ -141,8 +156,9 @@ class ScheduleCalculator:
 class ExcelGenerator:
     """Generates Excel files with proper formatting and calculations"""
 
-    def __init__(self, project: Project):
+    def __init__(self, project: Project, custom_logo_path: Optional[str] = None):
         self.project = project
+        self.custom_logo_path = custom_logo_path
         self.workbook = openpyxl.Workbook()
         self.worksheet = self.workbook.active
         self.worksheet.title = "Project Schedule"
@@ -196,6 +212,10 @@ class ExcelGenerator:
         # Generate charts - DISABLED FOR NOW (to be revisited)
         # self._generate_charts(current_row)
 
+        # Generate Gantt chart as second worksheet
+        gantt_generator = GanttChartGenerator(self.project, self.workbook)
+        gantt_generator.generate_gantt_chart()
+
         # Save file
         self.workbook.save(output_path)
 
@@ -218,11 +238,11 @@ class ExcelGenerator:
         title_cell = self.worksheet.cell(row=start_row, column=3, value=self.project.title)
         title_cell.font = Font(size=14, bold=True)
         title_cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-        title_cell.fill = PatternFill(start_color="ffc6c6", end_color="ffc6c6", fill_type="solid")
+        title_cell.fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
         
         # Set background color for A-B merged cell
         logo_cell = self.worksheet.cell(row=start_row, column=1)
-        logo_cell.fill = PatternFill(start_color="ffc6c6", end_color="ffc6c6", fill_type="solid")
+        logo_cell.fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
         
         # Merge cell J for empty column (no borders)
         self.worksheet.merge_cells(f"J{start_row}:J{start_row + 1}")
@@ -262,8 +282,14 @@ class ExcelGenerator:
         timestamp_cell.font = Font(size=9, bold=False)
         timestamp_cell.alignment = Alignment(horizontal='center', vertical='bottom', wrap_text=True)
         
-        # Look for logo file in the current directory
-        logo_path = "IESL-Logo.png"
+        # Use custom logo if provided, otherwise use default
+        if self.custom_logo_path and os.path.exists(self.custom_logo_path):
+            logo_path = self.custom_logo_path
+            print(f"Using custom logo: {logo_path}")
+        else:
+            # Look for default logo file - handle both development and executable paths
+            logo_path = get_resource_path("IESL-Logo.png")
+            print(f"Using default logo: {logo_path}")
         
         if os.path.exists(logo_path):
             try:
@@ -313,17 +339,34 @@ class ExcelGenerator:
             except Exception as e:
                 print(f"Warning: Could not add logo image: {e}")
         else:
-            print(f"Warning: Logo file '{logo_path}' not found in current directory")
+            print(f"Warning: Logo file not found at: {logo_path}")
+            # Only try fallback if using default logo (not custom)
+            if not self.custom_logo_path:
+                # Also check if file exists in current directory as fallback
+                fallback_path = "IESL-Logo.png"
+                if os.path.exists(fallback_path):
+                    print(f"Found logo in current directory, using: {fallback_path}")
+                    try:
+                        from openpyxl.drawing.image import Image
+                        img = Image(fallback_path)
+                        img.width = 100  # Default size
+                        img.height = 50
+                        img.anchor = f"A{start_row}"
+                        self.worksheet.add_image(img)
+                    except Exception as e:
+                        print(f"Warning: Could not add fallback logo: {e}")
+            else:
+                print("Custom logo file not found - proceeding without logo")
 
     def _add_styled_headers(self, start_row: int) -> int:
         """Add styled column headers"""
         headers = [
-            "S/No", "Activities/Tasks", "Action Needed", "Duration", "Precursor",
+            "S/No", "Activities/Tasks", "Action Needed", "Duration (in days)", "Precursor",
             "Sequence", "Schedule (in days)", "Resources", "Budget (MILLION)", "", "Review Comments"
         ]
         
-        # Orange background for columns A-I (Orange, Accent 2, Lighter 80%)
-        orange_fill = PatternFill(start_color="FDE4D0", end_color="FDE4D0", fill_type="solid")
+        # Light Yellow background for columns A-I (Custom Light Yellow 13)
+        light_yellow_fill = PatternFill(start_color="FFFDD0", end_color="FFFDD0", fill_type="solid")
         # White background for empty column J
         white_fill = PatternFill(start_color="FFFFFF", end_color="FFFFFF", fill_type="solid")
         # Red background for column K (Review Comments)
@@ -339,7 +382,7 @@ class ExcelGenerator:
             
             # Apply appropriate background color
             if col <= 9:  # Columns A-I
-                cell.fill = orange_fill
+                cell.fill = light_yellow_fill
             elif col == 10:  # Empty column J
                 cell.fill = white_fill
                 # No border applied for empty column
@@ -578,7 +621,7 @@ class ExcelGenerator:
             'A': 8,   # S/No - keep thin (halved)
             'B': 30,  # Activities/Tasks - wider for text (halved)
             'C': 30,  # Action Needed - wider for text (halved)
-            'D': 12,  # Duration - moderate (halved)
+            'D': 19,  # Duration (in days) - moderate (halved)
             'E': 25,  # Precursor - wider for text (halved)
             'F': 12,  # Sequence - narrow (halved)
             'G': 18,  # Schedule - moderate (halved)
@@ -961,6 +1004,449 @@ class ExcelGenerator:
     # END OF CHART GENERATION METHODS - ALL DISABLED
 
 
+class GanttChartGenerator:
+    """Generates Gantt chart worksheet based on Agile Gantt chart template"""
+    
+    def __init__(self, project: Project, workbook: openpyxl.Workbook):
+        self.project = project
+        self.workbook = workbook
+        
+        # Create Gantt chart worksheet
+        self.gantt_worksheet = self.workbook.create_sheet("Gantt Chart")
+        
+        # Styling constants matching Agile Gantt chart
+        self.border = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'),
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
+        
+        # Task type colors (matching project scheduler logic)
+        self.task_type_map = {
+            ActivitySection.PRE_KICKOFF: "Milestone",  # Pre-kickoff as milestones
+            ActivitySection.POST_KICKOFF: "Goal"       # Post-kickoff as goals
+        }
+    
+    def generate_gantt_chart(self) -> None:
+        """Generate the complete Gantt chart worksheet"""
+        # Calculate project timeline and dates
+        # Use project's start date if available, otherwise default to today
+        project_start_date = self.project.start_date if self.project.start_date else datetime.date.today()
+        timeline_data = self._calculate_timeline_data(project_start_date)
+        
+        # Set up worksheet structure
+        self._setup_worksheet_structure(timeline_data)
+        
+        # Add headers and timeline
+        self._add_gantt_headers(timeline_data)
+        
+        # Add task data and visualization
+        self._add_task_data(timeline_data)
+        
+        # Apply Gantt visualization formulas
+        self._apply_gantt_formulas(timeline_data)
+        
+        # Apply direct cell styling instead of conditional formatting to prevent corruption
+        self._apply_direct_gantt_styling(timeline_data)
+        
+        # Apply final formatting
+        self._apply_final_formatting(timeline_data)
+    
+    def _calculate_timeline_data(self, start_date: datetime.date) -> Dict:
+        """Calculate timeline dates and task schedules"""
+        schedules = ScheduleCalculator.calculate_schedules(self.project)
+        
+        # Get critical path activities
+        max_duration_activities = ScheduleCalculator.get_max_duration_activities(self.project)
+        critical_activity_ids = {id(activity) for activity, _ in max_duration_activities}
+        
+        # Convert schedules to actual dates
+        task_timeline = []
+        project_start_day = 0
+        project_end_day = 0
+        
+        for activity in self.project.activities:
+            if activity.section == ActivitySection.PRE_KICKOFF:
+                # Pre-kickoff activities start before project start
+                task_start_day = -activity.duration  # Negative days before start
+                task_end_day = 0
+                project_start_day = min(project_start_day, task_start_day)
+            else:
+                # Post-kickoff activities use calculated schedules
+                raw_schedule = schedules.get(activity.sequence, 0)
+                adjusted_schedule = ScheduleCalculator.apply_calendar_format(raw_schedule, self.project.calendar_format)
+                task_start_day = adjusted_schedule - activity.duration
+                task_end_day = adjusted_schedule
+            
+            task_start_date = start_date + datetime.timedelta(days=task_start_day)
+            task_end_date = start_date + datetime.timedelta(days=task_end_day)
+            
+            # Determine if this activity is on the critical path
+            is_critical = id(activity) in critical_activity_ids
+            
+            task_timeline.append({
+                'activity': activity,
+                'start_date': task_start_date,
+                'end_date': task_end_date,
+                'start_day': task_start_day,
+                'end_day': task_end_day,
+                'duration': activity.duration,
+                'task_type': self.task_type_map[activity.section],
+                'is_critical': is_critical
+            })
+            
+            project_end_day = max(project_end_day, task_end_day)
+        
+        # Calculate dynamic timeline to ensure ALL activities are captured
+        timeline_buffer = 15  # 15 days buffer on each side
+        timeline_start_day = project_start_day - timeline_buffer
+        timeline_end_day = project_end_day + timeline_buffer
+        timeline_days = timeline_end_day - timeline_start_day + 1
+        
+        # Ensure minimum 80 days for readability and prevent invalid ranges
+        timeline_days = max(timeline_days, 80)
+        
+        # Additional safety check to prevent corruption
+        if timeline_days <= 0:
+            print("Warning: Invalid timeline calculation, using default 80 days")
+            timeline_days = 80
+        
+        timeline_start = start_date + datetime.timedelta(days=timeline_start_day)
+        date_timeline = []
+        
+        for i in range(timeline_days):
+            date_timeline.append(timeline_start + datetime.timedelta(days=i))
+        
+        return {
+            'project_start_date': start_date,
+            'date_timeline': date_timeline,
+            'task_timeline': task_timeline,
+            'timeline_start': timeline_start,
+            'timeline_days': timeline_days,
+            'timeline_start_day': timeline_start_day,
+            'critical_activities': critical_activity_ids
+        }
+    
+    def _setup_worksheet_structure(self, timeline_data: Dict) -> None:
+        """Set up basic worksheet structure and column widths"""
+        # Set column widths (matching Agile Gantt chart)
+        self.gantt_worksheet.column_dimensions['A'].width = 4   # Row numbers
+        self.gantt_worksheet.column_dimensions['B'].width = 25  # Task names
+        self.gantt_worksheet.column_dimensions['C'].width = 12  # Task types
+        self.gantt_worksheet.column_dimensions['D'].width = 8   # Progress
+        self.gantt_worksheet.column_dimensions['E'].width = 10  # Start dates
+        self.gantt_worksheet.column_dimensions['F'].width = 12  # Start (calculated)
+        self.gantt_worksheet.column_dimensions['G'].width = 8   # Duration
+        self.gantt_worksheet.column_dimensions['H'].width = 5   # Empty
+        
+        # Timeline columns (I onwards) - dynamic based on project length
+        timeline_columns = timeline_data['timeline_days']
+        max_col = 9 + timeline_columns
+        
+        for col in range(9, max_col):  # Dynamic range based on timeline
+            col_letter = get_column_letter(col)
+            self.gantt_worksheet.column_dimensions[col_letter].width = 2.5
+    
+    def _add_gantt_headers(self, timeline_data: Dict) -> None:
+        """Add headers matching Agile Gantt chart structure"""
+        ws = self.gantt_worksheet
+        
+        # Row 1: Project title header
+        ws.merge_cells('A1:H1')
+        title_cell = ws.cell(row=1, column=1, value=f"Project Gantt Chart - {self.project.title}")
+        title_cell.font = Font(size=14, bold=True)
+        title_cell.alignment = Alignment(horizontal='center', vertical='center')
+        title_cell.fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
+        
+        # Row 2: Empty spacer
+        
+        # Row 3: Legend
+        ws.cell(row=3, column=7, value="Legend:")
+        
+        # Row 4: Legend items (merge 2 cells each for better visibility)
+        ws.merge_cells('L4:M4')
+        goal_cell = ws.cell(row=4, column=12, value="G")
+        goal_cell.fill = PatternFill(start_color="5B9BD5", end_color="5B9BD5", fill_type="solid")
+        goal_cell.font = Font(color="FFFFFF", bold=True)
+        goal_cell.alignment = Alignment(horizontal='center')
+        
+        ws.merge_cells('N4:O4')
+        milestone_cell = ws.cell(row=4, column=14, value="M")
+        milestone_cell.fill = PatternFill(start_color="70AD47", end_color="70AD47", fill_type="solid")
+        milestone_cell.font = Font(color="FFFFFF", bold=True)
+        milestone_cell.alignment = Alignment(horizontal='center')
+        
+        ws.merge_cells('P4:Q4')
+        critical_cell = ws.cell(row=4, column=16, value="CP")
+        critical_cell.fill = PatternFill(start_color="DC143C", end_color="DC143C", fill_type="solid")
+        critical_cell.font = Font(color="FFFFFF", bold=True)
+        critical_cell.alignment = Alignment(horizontal='center')
+        
+        # Row 5: Project start date
+        ws.cell(row=5, column=2, value="Project start date:")
+        start_date_cell = ws.cell(row=5, column=6, value=timeline_data['project_start_date'])
+        start_date_cell.number_format = 'dd-mmm-yyyy'
+        
+        # Row 6: Month headers
+        self._add_month_headers(timeline_data)
+        
+        # Row 7: Date headers
+        self._add_date_headers(timeline_data)
+        
+        # Row 8: Empty spacer
+        
+        # Row 9: Column headers
+        headers = ["#", "Milestone description", "Type", "%", "Due date", "Start", "Days", "", "Timeline →"]
+        for col, header in enumerate(headers, 1):
+            cell = ws.cell(row=9, column=col, value=header)
+            cell.font = Font(bold=True)
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+            if col <= 7:  # Main headers
+                cell.fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
+                cell.border = self.border
+    
+    def _add_month_headers(self, timeline_data: Dict) -> None:
+        """Add month headers (row 6) like Agile Gantt chart"""
+        ws = self.gantt_worksheet
+        
+        # Add month headers starting from column I (9)
+        timeline_start_col = 9
+        current_month = None
+        month_start_col = None
+        max_timeline_col = timeline_start_col + timeline_data['timeline_days'] - 1
+        
+        for i, date in enumerate(timeline_data['date_timeline']):
+            col = timeline_start_col + i
+            if col > max_timeline_col:  # Dynamic limit based on timeline
+                break
+                
+            month_name = date.strftime("%B")
+            
+            if month_name != current_month:
+                # End previous month merge if exists
+                if current_month and month_start_col:
+                    if col - 1 > month_start_col:
+                        ws.merge_cells(f"{get_column_letter(month_start_col)}6:{get_column_letter(col-1)}6")
+                    month_cell = ws.cell(row=6, column=month_start_col, value=current_month)
+                    month_cell.font = Font(bold=True, size=10)
+                    month_cell.alignment = Alignment(horizontal='center')
+                    month_cell.fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+                
+                # Start new month
+                current_month = month_name
+                month_start_col = col
+        
+        # Handle last month
+        if current_month and month_start_col:
+            last_col = min(max_timeline_col, timeline_start_col + len(timeline_data['date_timeline']) - 1)
+            if last_col > month_start_col:
+                ws.merge_cells(f"{get_column_letter(month_start_col)}6:{get_column_letter(last_col)}6")
+            month_cell = ws.cell(row=6, column=month_start_col, value=current_month)
+            month_cell.font = Font(bold=True, size=10)
+            month_cell.alignment = Alignment(horizontal='center')
+            month_cell.fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+    
+    def _add_date_headers(self, timeline_data: Dict) -> None:
+        """Add date headers (row 7) for timeline"""
+        ws = self.gantt_worksheet
+        
+        timeline_start_col = 9
+        max_timeline_col = timeline_start_col + timeline_data['timeline_days'] - 1
+        
+        for i, date in enumerate(timeline_data['date_timeline']):
+            col = timeline_start_col + i
+            if col > max_timeline_col:  # Dynamic limit based on timeline
+                break
+                
+            date_cell = ws.cell(row=7, column=col, value=date)
+            date_cell.number_format = 'd'  # Day number only
+            date_cell.font = Font(size=8)
+            date_cell.alignment = Alignment(horizontal='center')
+    
+    def _add_task_data(self, timeline_data: Dict) -> None:
+        """Add task data rows"""
+        ws = self.gantt_worksheet
+        
+        start_row = 10  # Start after headers
+        for i, task_data in enumerate(timeline_data['task_timeline']):
+            row = start_row + i
+            activity = task_data['activity']
+            
+            # Column A: Row number
+            ws.cell(row=row, column=1, value=i + 1)
+            
+            # Column B: Task name
+            task_cell = ws.cell(row=row, column=2, value=activity.task)
+            task_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            
+            # Column C: Task type
+            type_cell = ws.cell(row=row, column=3, value=task_data['task_type'])
+            
+            # Column D: Progress (empty for now)
+            ws.cell(row=row, column=4, value="")
+            
+            # Column E: Due date (end date)
+            due_cell = ws.cell(row=row, column=5, value=task_data['end_date'])
+            due_cell.number_format = 'dd-mmm'
+            
+            # Column F: Start date
+            start_cell = ws.cell(row=row, column=6, value=task_data['start_date'])
+            start_cell.number_format = 'dd-mmm'
+            
+            # Column G: Duration
+            ws.cell(row=row, column=7, value=activity.duration)
+            
+            # Apply basic formatting
+            for col in range(1, 8):
+                cell = ws.cell(row=row, column=col)
+                cell.border = self.border
+                if col == 1:  # Row number
+                    cell.alignment = Alignment(horizontal='center', vertical='center')
+                    cell.font = Font(size=9)
+    
+    def _apply_gantt_formulas(self, timeline_data: Dict) -> None:
+        """Apply Gantt visualization formulas like Agile Gantt chart"""
+        ws = self.gantt_worksheet
+        
+        start_row = 10
+        timeline_start_col = 9
+        max_timeline_col = timeline_start_col + timeline_data['timeline_days'] - 1
+        
+        for i, task_data in enumerate(timeline_data['task_timeline']):
+            row = start_row + i
+            
+            # Add formulas for each timeline column
+            for j, timeline_date in enumerate(timeline_data['date_timeline']):
+                col = timeline_start_col + j
+                if col > max_timeline_col:  # Dynamic limit based on timeline
+                    break
+                
+                col_letter = get_column_letter(col)
+                
+                # Create formula that returns numeric values for conditional formatting
+                # Use numbers instead of text for completely clean bars (no visible text)
+                # 4 = Critical path goals (red), 3 = Critical milestones (dark red)
+                # 2 = Regular goals (blue), 1 = Regular milestones (green)
+                
+                if task_data['is_critical']:
+                    # Critical path activities (red bars) - return 4 or 3
+                    if task_data['task_type'] == "Goal":
+                        formula = (f'=IF(AND($C{row}="Goal",{col_letter}$7>=$F{row},{col_letter}$7<=$F{row}+$G{row}-1),4,"")') 
+                    else:
+                        formula = (f'=IF(AND($C{row}="Milestone",{col_letter}$7>=$F{row},{col_letter}$7<=$F{row}+$G{row}-1),3,"")') 
+                else:
+                    # Regular activities - return 2 or 1
+                    formula = (f'=IF(AND($C{row}="Goal",{col_letter}$7>=$F{row},{col_letter}$7<=$F{row}+$G{row}-1),2,'
+                              f'IF(AND($C{row}="Milestone",{col_letter}$7>=$F{row},{col_letter}$7<=$F{row}+$G{row}-1),1,""))')
+                
+                cell = ws.cell(row=row, column=col, value=formula)
+                # Hide the numbers by setting custom number format that shows nothing
+                cell.number_format = ';;;"";'  # This format hides all values (positive, negative, zero, text)
+    
+    def _apply_direct_gantt_styling(self, timeline_data: Dict) -> None:
+        """Apply direct cell styling for Gantt visualization (avoiding conditional formatting corruption)"""
+        ws = self.gantt_worksheet
+        
+        # Validate timeline data
+        if timeline_data['timeline_days'] <= 0 or len(self.project.activities) == 0:
+            print("Warning: Invalid timeline data, skipping Gantt styling")
+            return
+        
+        timeline_start_col_num = 9
+        timeline_end_col_num = timeline_start_col_num + timeline_data['timeline_days'] - 1
+        timeline_end_row = 10 + len(self.project.activities) - 1
+        
+        # Safety checks
+        if timeline_end_col_num > 16384:
+            timeline_end_col_num = 16384
+        if timeline_end_row < 10:
+            return
+        
+        # Define color fills
+        color_map = {
+            4: PatternFill(start_color="DC143C", end_color="DC143C", fill_type="solid"),  # Critical goals - red
+            3: PatternFill(start_color="B22222", end_color="B22222", fill_type="solid"),  # Critical milestones - dark red  
+            2: PatternFill(start_color="5B9BD5", end_color="5B9BD5", fill_type="solid"),  # Regular goals - blue
+            1: PatternFill(start_color="70AD47", end_color="70AD47", fill_type="solid"),  # Regular milestones - green
+        }
+        
+        print(f"Applying direct styling to range: I10 to {get_column_letter(timeline_end_col_num)}{timeline_end_row}")
+        
+        try:
+            # Apply styling directly to cells based on their calculated values
+            for row in range(10, timeline_end_row + 1):
+                for col in range(timeline_start_col_num, timeline_end_col_num + 1):
+                    cell = ws.cell(row=row, column=col)
+                    
+                    if cell.value and isinstance(cell.value, str) and cell.value.startswith('='):
+                        # Evaluate the formula to get the expected result
+                        try:
+                            # Get task data for this row
+                            task_index = row - 10
+                            if task_index < len(timeline_data['task_timeline']):
+                                task_data = timeline_data['task_timeline'][task_index]
+                                
+                                # Get the date for this column
+                                date_index = col - timeline_start_col_num
+                                if date_index < len(timeline_data['date_timeline']):
+                                    current_date = timeline_data['date_timeline'][date_index]
+                                    task_start_date = task_data['start_date']
+                                    task_end_date = task_start_date + datetime.timedelta(days=task_data['duration'] - 1)
+                                    
+                                    # Check if this date falls within the task duration
+                                    if task_start_date <= current_date <= task_end_date:
+                                        # Determine the color based on task type and criticality
+                                        if task_data['is_critical']:
+                                            if task_data['task_type'] == "Goal":
+                                                color_value = 4  # Critical goal - red
+                                            else:
+                                                color_value = 3  # Critical milestone - dark red
+                                        else:
+                                            if task_data['task_type'] == "Goal":
+                                                color_value = 2  # Regular goal - blue
+                                            else:
+                                                color_value = 1  # Regular milestone - green
+                                        
+                                        # Apply the color
+                                        if color_value in color_map:
+                                            cell.fill = color_map[color_value]
+                                            # Make font invisible by setting it to white
+                                            cell.font = Font(color="FFFFFF", size=1)
+                                            # Keep the number format to hide values
+                                            cell.number_format = ';;;"";'
+                        except Exception as cell_error:
+                            # Skip problematic cells
+                            pass
+            
+            print("Direct Gantt styling applied successfully")
+            
+        except Exception as e:
+            print(f"Warning: Could not apply direct Gantt styling: {e}")
+            # Continue without styling rather than corrupting the file
+    
+    def _apply_final_formatting(self, timeline_data: Dict) -> None:
+        """Apply final formatting touches"""
+        ws = self.gantt_worksheet
+        
+        # Set row heights
+        for row in range(1, 10 + len(self.project.activities)):
+            if row == 1:  # Title row
+                ws.row_dimensions[row].height = 25
+            elif row in [6, 7, 9]:  # Header rows
+                ws.row_dimensions[row].height = 20
+            elif row >= 10:  # Activity data rows - increased height for better visibility
+                ws.row_dimensions[row].height = 50
+            else:  # Other rows (spacers, etc.)
+                ws.row_dimensions[row].height = 18
+        
+        # Freeze panes to keep headers visible
+        ws.freeze_panes = 'I10'
+        
+        # Hide gridlines
+        ws.sheet_view.showGridLines = False
+
+
 class ExcelLoader:
     """Loads existing Excel files generated by the project scheduler"""
     
@@ -1151,11 +1637,12 @@ class ProjectSchedulerGUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Project Scheduler")
-        self.root.geometry("1000x600")  # Restored width, adjusted height to show Actions section
-        self.root.minsize(800, 400)  # Set minimum size to ensure usability
+        self.root.geometry("1200x750")  # Restored width, adjusted height to show Actions section
+        self.root.minsize(1000, 700)  # Set minimum size to ensure usability
         
         self.project = None
         self.activities_data = []
+        self.custom_logo_path = None  # Store custom logo path
 
         self.setup_ui()
 
@@ -1169,10 +1656,13 @@ class ProjectSchedulerGUI:
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
         main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(3, weight=1)  # Make activities section expandable
+        main_frame.rowconfigure(4, weight=1)  # Make activities section expandable
 
         # Project title section
         self.setup_project_section(main_frame)
+
+        # Logo upload section  
+        self.setup_logo_section(main_frame)
 
         # Calendar format section
         self.setup_calendar_section(main_frame)
@@ -1184,23 +1674,72 @@ class ProjectSchedulerGUI:
         self.setup_buttons_section(main_frame)
 
     def setup_project_section(self, parent):
-        """Set up project title input section"""
+        """Set up project title and start date input section"""
         # Project Title
         ttk.Label(parent, text="Project Title:", font=('Arial', 12, 'bold')).grid(
             row=0, column=0, sticky=tk.W, pady=(0, 10))
 
         self.project_title_var = tk.StringVar()
         project_entry = ttk.Entry(parent, textvariable=self.project_title_var, width=50, font=('Arial', 11))
-        project_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 10))
+        project_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 10), columnspan=2)
+        
+        # Project Start Date
+        ttk.Label(parent, text="Project Start Date:", font=('Arial', 12, 'bold')).grid(
+            row=0, column=3, sticky=tk.W, pady=(0, 10), padx=(20, 0))
+        
+        # Create frame for date input
+        date_frame = ttk.Frame(parent)
+        date_frame.grid(row=0, column=4, sticky=tk.W, pady=(0, 10))
+        
+        # Date entry field
+        self.start_date_var = tk.StringVar()
+        
+        # Set default to today's date
+        import datetime
+        default_date = datetime.date.today().strftime("%Y-%m-%d")
+        self.start_date_var.set(default_date)
+        
+        date_entry = ttk.Entry(date_frame, textvariable=self.start_date_var, width=12, font=('Arial', 11))
+        date_entry.pack(side=tk.LEFT, padx=(0, 5))
+        
+        # Help label
+        help_label = ttk.Label(date_frame, text="(YYYY-MM-DD)", foreground="gray", font=('Arial', 9))
+        help_label.pack(side=tk.LEFT)
+        
+        # Today button
+        today_button = ttk.Button(date_frame, text="Today", command=self.set_today_date, width=8)
+        today_button.pack(side=tk.LEFT, padx=(5, 0))
+
+    def setup_logo_section(self, parent):
+        """Set up logo upload section"""
+        ttk.Label(parent, text="Custom Logo:", font=('Arial', 12, 'bold')).grid(
+            row=1, column=0, sticky=tk.W, pady=(0, 10))
+
+        logo_frame = ttk.Frame(parent)
+        logo_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        # Logo selection button
+        self.logo_button = ttk.Button(logo_frame, text="Choose Logo", command=self.choose_logo, width=15)
+        self.logo_button.pack(side=tk.LEFT, padx=(0, 10))
+
+        # Logo status label
+        self.logo_status_var = tk.StringVar(value="Using default logo (IESL-Logo.png)")
+        self.logo_status_label = ttk.Label(logo_frame, textvariable=self.logo_status_var, foreground="gray")
+        self.logo_status_label.pack(side=tk.LEFT)
+
+        # Reset logo button
+        self.reset_logo_button = ttk.Button(logo_frame, text="Reset to Default", command=self.reset_logo, width=15)
+        self.reset_logo_button.pack(side=tk.LEFT, padx=(10, 0))
+        self.reset_logo_button.configure(state="disabled")  # Initially disabled
 
     def setup_calendar_section(self, parent):
         """Set up calendar format selection"""
         ttk.Label(parent, text="Calendar Format:", font=('Arial', 12, 'bold')).grid(
-            row=1, column=0, sticky=tk.W, pady=(0, 10))
+            row=2, column=0, sticky=tk.W, pady=(0, 10))
 
         self.calendar_format_var = tk.StringVar(value=CalendarFormat.FIVE_DAY.value)
         calendar_frame = ttk.Frame(parent)
-        calendar_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(0, 10))
+        calendar_frame.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=(0, 10))
 
         for i, fmt in enumerate(CalendarFormat):
             ttk.Radiobutton(calendar_frame, text=fmt.value, variable=self.calendar_format_var,
@@ -1210,11 +1749,11 @@ class ProjectSchedulerGUI:
         """Set up activities input section"""
         # Activities section label
         ttk.Label(parent, text="Activities:", font=('Arial', 12, 'bold')).grid(
-            row=2, column=0, columnspan=2, sticky=tk.W, pady=(20, 10))
+            row=3, column=0, columnspan=2, sticky=tk.W, pady=(20, 10))
 
         # Activities frame
         activities_frame = ttk.Frame(parent)
-        activities_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 20))
+        activities_frame.grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 20))
         activities_frame.columnconfigure(0, weight=1)
         activities_frame.rowconfigure(1, weight=1)
 
@@ -1311,7 +1850,7 @@ class ProjectSchedulerGUI:
     def setup_buttons_section(self, main_frame):
         """Setup the buttons section"""
         buttons_frame = ttk.LabelFrame(main_frame, text="Actions", padding="10")
-        buttons_frame.grid(row=4, column=0, columnspan=2, pady=(20, 10), sticky=(tk.W, tk.E))
+        buttons_frame.grid(row=5, column=0, columnspan=2, pady=(20, 10), sticky=(tk.W, tk.E))
         
         # Create a centered button layout
         button_container = ttk.Frame(buttons_frame)
@@ -1412,6 +1951,80 @@ class ProjectSchedulerGUI:
             messagebox.showerror("Error", "Please enter valid numbers for Duration, Sequence, and Budget.")
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
+    def set_today_date(self):
+        """Set the start date to today's date"""
+        import datetime
+        today = datetime.date.today().strftime("%Y-%m-%d")
+        self.start_date_var.set(today)
+    
+    def choose_logo(self):
+        """Open file dialog to choose a custom logo"""
+        try:
+            file_types = [
+                ("Image files", "*.png *.jpg *.jpeg *.gif *.bmp"),
+                ("PNG files", "*.png"),
+                ("JPEG files", "*.jpg *.jpeg"),
+                ("All files", "*.*")
+            ]
+            
+            file_path = filedialog.askopenfilename(
+                title="Choose Logo Image",
+                filetypes=file_types,
+                initialdir=os.path.expanduser("~")
+            )
+            
+            if file_path:
+                # Validate that it's an image file
+                valid_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.bmp'}
+                file_ext = os.path.splitext(file_path)[1].lower()
+                
+                if file_ext not in valid_extensions:
+                    messagebox.showerror("Error", "Please select a valid image file (PNG, JPG, JPEG, GIF, BMP)")
+                    return
+                
+                # Check file size (optional - limit to reasonable size, e.g., 5MB)
+                file_size = os.path.getsize(file_path)
+                max_size = 5 * 1024 * 1024  # 5MB
+                if file_size > max_size:
+                    messagebox.showerror("Error", f"Image file is too large. Please select a file smaller than {max_size // (1024*1024)}MB.")
+                    return
+                
+                # Try to open the image to verify it's valid
+                try:
+                    from PIL import Image as PILImage
+                    img = PILImage.open(file_path)
+                    img.verify()  # Verify the image is valid
+                except ImportError:
+                    # PIL not available, just proceed (openpyxl will handle validation)
+                    pass
+                except Exception as e:
+                    messagebox.showerror("Error", f"Invalid image file: {str(e)}")
+                    return
+                
+                # Store the custom logo path
+                self.custom_logo_path = file_path
+                
+                # Update status label
+                filename = os.path.basename(file_path)
+                self.logo_status_var.set(f"Using custom logo: {filename}")
+                self.logo_status_label.configure(foreground="green")
+                
+                # Enable reset button
+                self.reset_logo_button.configure(state="normal")
+                
+                messagebox.showinfo("Success", f"Custom logo selected: {filename}")
+                
+        except Exception as e:
+            messagebox.showerror("Error", f"Error selecting logo: {str(e)}")
+
+    def reset_logo(self):
+        """Reset to the default logo"""
+        self.custom_logo_path = None
+        self.logo_status_var.set("Using default logo (IESL-Logo.png)")
+        self.logo_status_label.configure(foreground="gray")
+        self.reset_logo_button.configure(state="disabled")
+        messagebox.showinfo("Success", "Reset to default logo")
 
     def setup_context_menu(self):
         """Setup right-click context menu for activities tree"""
@@ -1615,6 +2228,12 @@ class ProjectSchedulerGUI:
             self.activities_data.clear()
             self.activities_tree.delete(*self.activities_tree.get_children())
             self.project_title_var.set("")
+            
+            # Reset start date to today
+            import datetime
+            today = datetime.date.today().strftime("%Y-%m-%d")
+            self.start_date_var.set(today)
+            
             for var in self.form_vars.values():
                 var.set("")
             self.update_activities_count()
@@ -1758,35 +2377,34 @@ class ProjectSchedulerGUI:
 
                          # Generate Excel file
             project = self.create_project()
-            generator = ExcelGenerator(project)
+            generator = ExcelGenerator(project, self.custom_logo_path)
             generator.generate(file_path)
             
-            # Generate accompanying .txt file with schedule details
-            txt_file_path = file_path.replace('.xlsx', '_details.txt')
-            try:
-                preview_text = self.generate_preview_text(project)
-                with open(txt_file_path, 'w', encoding='utf-8') as txt_file:
-                    txt_file.write(preview_text)
-            except Exception as txt_error:
-                print(f"Warning: Could not create .txt file: {txt_error}")
+            # .txt file generation disabled - only Excel files are generated
+            # txt_file_path = file_path.replace('.xlsx', '_details.txt')
+            # try:
+            #     preview_text = self.generate_preview_text(project)
+            #     with open(txt_file_path, 'w', encoding='utf-8') as txt_file:
+            #         txt_file.write(preview_text)
+            # except Exception as txt_error:
+            #     print(f"Warning: Could not create .txt file: {txt_error}")
             
             # Close progress window
             progress_window.destroy()
 
             # Show success message with option to open file location
-            files_created = f"Files created:\n• {file_path}\n• {txt_file_path}"
+            import subprocess
+            import platform
+            
             result = messagebox.askyesno(
                 "Success", 
-                f"Project files generated successfully!\n\n"
-                f"{files_created}\n\n"
+                f"Excel project schedule generated successfully!\n\n"
+                f"File created: {os.path.basename(file_path)}\n\n"
                 f"Would you like to open the file location?",
                 icon='info'
             )
             
             if result:
-                import os
-                import subprocess
-                import platform
                 
                 # Open file location in file explorer
                 if platform.system() == "Windows":
@@ -1824,11 +2442,22 @@ class ProjectSchedulerGUI:
             if fmt.value == self.calendar_format_var.get():
                 calendar_format = fmt
                 break
+        
+        # Parse start date
+        start_date = None
+        try:
+            start_date_str = self.start_date_var.get().strip()
+            if start_date_str:
+                start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            # If parsing fails, use today's date
+            start_date = datetime.date.today()
 
         # Create project
         project = Project(
             title=self.project_title_var.get().strip(),
-            calendar_format=calendar_format
+            calendar_format=calendar_format,
+            start_date=start_date
         )
 
         # Add activities
@@ -1968,6 +2597,11 @@ class ProjectSchedulerGUI:
         """Clear all data from the GUI without confirmation"""
         # Clear form fields
         self.project_title_var.set("")
+        
+        # Reset start date to today
+        import datetime
+        today = datetime.date.today().strftime("%Y-%m-%d")
+        self.start_date_var.set(today)
         
         # Clear form variables using the form_vars dictionary
         for var in self.form_vars.values():

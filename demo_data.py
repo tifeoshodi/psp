@@ -125,25 +125,24 @@ def create_jigawa_project():
 
 
 def main():
-    """Generate demo Excel and text files with JIGAWA project data"""
+    """Generate demo Excel file with JIGAWA project data"""
     print("Creating JIGAWA EXECUTION PLAN project...")
     project = create_jigawa_project()
     
-    print("Generating Excel and text files...")
+    print("Generating Excel file...")
     generator = ExcelGenerator(project)
     excel_path = "JIGAWA_execution_plan.xlsx"
     generator.generate(excel_path)
     
-    # Generate accompanying .txt file (like GUI does)
-    txt_path = "JIGAWA_execution_plan_details.txt"
-    gui = ProjectSchedulerGUI()
-    preview_text = gui.generate_preview_text(project)
-    with open(txt_path, 'w', encoding='utf-8') as txt_file:
-        txt_file.write(preview_text)
+    # .txt file generation disabled - only Excel files are generated
+    # txt_path = "JIGAWA_execution_plan_details.txt"
+    # gui = ProjectSchedulerGUI()
+    # preview_text = gui.generate_preview_text(project)
+    # with open(txt_path, 'w', encoding='utf-8') as txt_file:
+    #     txt_file.write(preview_text)
     
-    print(f"JIGAWA project files created:")
+    print(f"JIGAWA project file created:")
     print(f"  • Excel: {excel_path}")
-    print(f"  • Text:  {txt_path}")
     print("\nProject Summary:")
     print(f"Title: {project.title}")
     print(f"Calendar Format: {project.calendar_format.value}")
@@ -156,7 +155,7 @@ def main():
     print(f"Post Kick-off Activities: {len(post_kickoff)}")
     
     total_budget = sum(activity.budget for activity in project.activities)
-    print(f"Total Budget: ₦{total_budget:,.2f} ({total_budget/1000000:.2f} million)")
+    print(f"Total Budget: N{total_budget:,.2f} ({total_budget/1000000:.2f} million)")
 
 
 if __name__ == "__main__":
