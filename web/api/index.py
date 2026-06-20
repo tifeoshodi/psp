@@ -6,6 +6,12 @@ import os
 import tempfile
 from typing import List
 
+import os
+import sys
+
+# Ensure Vercel can find modules in the api directory
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from models import ProjectCreate, ProjectUpdate, ProjectResponse, ActivityCreate, ActivityUpdate, ActivityResponse
 from database import get_db_connection
 from core_logic import Project, Activity, ActivitySection, CalendarFormat, ExcelGenerator, GanttChartGenerator
