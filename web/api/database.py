@@ -3,26 +3,76 @@ import os
 import tempfile
 import uuid
 
+# Check if Turso is configured
+TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
+TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
+
+class DummyCursor:
+    def __init__(self, result):
+        self.result = result
+
+    def fetchall(self):
+        # Return a list of dictionaries representing rows
+        return [dict(row) for row in self.result.rows]
+
+    def fetchone(self):
+        # Return a single dictionary or None
+        if self.result.rows:
+            return dict(self.result.rows[0])
+        return None
+
+class DBConnectionWrapper:
+    def __init__(self, url, token):
+        import libsql_client
+        # Connect to Turso over HTTP
+        self.client = libsql_client.create_client_sync(url=url, auth_token=token)
+
+    def execute(self, sql, args=None):
+        if args is None:
+            args = []
+        # Ensure args is a list as required by some libsql-client bindings
+        if isinstance(args, tuple):
+            args = list(args)
+            
+        # Execute query against Turso
+        result = self.client.execute(sql, args)
+        return DummyCursor(result)
+
+    def commit(self):
+        # Turso client automatically handles transactions/commits on simple execute calls
+        pass
+
+    def close(self):
+        self.client.close()
+
 def get_db_path():
-    # If on Vercel, use /tmp. Otherwise use local directory.
+    # Fallback to local SQLite file
     if os.environ.get("VERCEL"):
         return os.path.join(tempfile.gettempdir(), "project_scheduler.db")
     return os.path.join(os.path.dirname(__file__), "project_scheduler.db")
 
+def get_db_connection():
+    if TURSO_URL and TURSO_TOKEN:
+        return DBConnectionWrapper(TURSO_URL, TURSO_TOKEN)
+    else:
+        path = get_db_path()
+        conn = sqlite3.connect(path)
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
+        return conn
+
 def init_db():
-    path = get_db_path()
-    conn = sqlite3.connect(path)
-    # Enable foreign keys and WAL mode
-    conn.execute("PRAGMA foreign_keys = ON")
-    try:
-        conn.execute("PRAGMA journal_mode = WAL")
-    except sqlite3.OperationalError:
-        pass # WAL mode not supported on some file systems
+    conn = get_db_connection()
     
-    cursor = conn.cursor()
-    
+    # Only set journal mode if using local SQLite
+    if not (TURSO_URL and TURSO_TOKEN):
+        try:
+            conn.execute("PRAGMA journal_mode = WAL")
+        except sqlite3.OperationalError:
+            pass
+            
     # Create projects table
-    cursor.execute('''
+    conn.execute('''
     CREATE TABLE IF NOT EXISTS projects (
         id TEXT PRIMARY KEY,
         title TEXT NOT NULL,
@@ -35,7 +85,7 @@ def init_db():
     ''')
     
     # Create activities table
-    cursor.execute('''
+    conn.execute('''
     CREATE TABLE IF NOT EXISTS activities (
         id TEXT PRIMARY KEY,
         project_id TEXT NOT NULL,
@@ -54,12 +104,5 @@ def init_db():
     conn.commit()
     conn.close()
 
-def get_db_connection():
-    path = get_db_path()
-    conn = sqlite3.connect(path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    return conn
-
-# Initialize the database on module import
+# Initialize the database tables on module import
 init_db()
