@@ -7,6 +7,10 @@ import uuid
 TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
 TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
 
+# Enforce HTTPS for Vercel Serverless compatibility (WebSockets are often dropped)
+if TURSO_URL and TURSO_URL.startswith("libsql://"):
+    TURSO_URL = TURSO_URL.replace("libsql://", "https://", 1)
+
 class DummyCursor:
     def __init__(self, result):
         self.result = result
