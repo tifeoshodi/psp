@@ -17,12 +17,16 @@ class DummyCursor:
 
     def fetchall(self):
         # Return a list of dictionaries representing rows
-        return [dict(row) for row in self.result.rows]
+        if not hasattr(self.result, 'columns'):
+            return []
+        columns = self.result.columns
+        return [dict(zip(columns, row)) for row in self.result.rows]
 
     def fetchone(self):
         # Return a single dictionary or None
-        if self.result.rows:
-            return dict(self.result.rows[0])
+        if self.result.rows and hasattr(self.result, 'columns'):
+            columns = self.result.columns
+            return dict(zip(columns, self.result.rows[0]))
         return None
 
 class DBConnectionWrapper:
