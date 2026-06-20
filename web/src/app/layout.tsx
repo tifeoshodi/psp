@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Project Scheduler",
     description: "Manage your construction schedules and Gantt charts.",
-    images: ["/Full-IESL-Logo.png"],
+    images: ["/pwa-192x192.png"],
     type: "website",
   },
 };
