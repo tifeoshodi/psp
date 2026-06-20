@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
     apple: "/pwa-192x192.png",
   },
+  openGraph: {
+    title: "Project Scheduler",
+    description: "Manage your construction schedules and Gantt charts.",
+    images: ["/Full-IESL-Logo.png"],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
